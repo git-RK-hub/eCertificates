@@ -7,4 +7,4 @@
 // create citizen profile controller
 // check for new citizen controller
 // issue card controller
-
+// encrypt document

@@ -6,4 +6,5 @@ share document
 download document
 open document
 request for profile updation
+decrypt document
 */
