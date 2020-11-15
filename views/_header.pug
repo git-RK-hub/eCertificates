@@ -1,0 +1,40 @@
+.login-section.login
+    form.loginform
+        .p10 +
+        input(type="email", name="login-email" placeholder="email" id="login-email")
+        input(type="password", name="login-password" placeholder="password" id="login-password")
+        button(class="login-button" id="login-button") Login
+
+.signup-section.signup
+    form.signupform
+        .p9 +
+        input(type="text" name="name" placeholder="Name" id="name" required)
+        input(type="email", name="signup-email" placeholder="Email" id="signup-email")
+        input(type="password", name="signup-password" placeholder="Password" id="signup-password")
+        input(type="password", name="confirmPassword" placeholder="Confirm Password" id="confirmPassword")
+        button(class="sign-button" id="sign-button") Signup
+
+.header
+    a(href="/")
+            p Pocket Dlocker
+nav
+    .nav-links
+        a(href="/") Home
+    .nav-links
+    .nav-links
+    .nav-links
+    .nav-links
+    .nav-links
+    .nav-links
+    .nav-links
+    .nav-links
+    if user
+        .nav-links
+            a(style="cursor:pointer; margin-right: 7px;" href=`/dashboard/${user._id}`) Dashboard
+        .nav-links#logout-head
+            p(style="cursor:pointer; margin-left: 7px;") Logout 
+    else
+        .nav-links#login-head
+            p(style="cursor:pointer;") Login 
+        .nav-links#signup-head
+            p(style="cursor:pointer;") Signup

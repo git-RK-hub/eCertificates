@@ -1,0 +1,32 @@
+extends base
+
+mixin user-card(user)
+    .card-div
+        .p11= user.name
+        .p12= user.email
+        a(class="p13", href=`/allocate/${user.id}`) Allocate
+
+mixin document(doc)
+    .p8(data-userid=`${doc.user}` style="cursor: pointer;")= doc.certiName
+
+block content
+    .save
+        if (user.role === "user")
+            .p7 ~~~~~~ My Documents ~~~~~~
+            .user-documents
+                if (docs.length !== 0)
+                    each doc in docs
+                        +document(doc)
+                else
+                    .p2(style="font-family: cursive; text-align: center;") No Documents :/
+        else
+            .p4 ~~~~~~ Allocate Documents ~~~~~~
+            .users
+                .format 
+                    .p1
+                    .p5 Name
+                    .p6 Email
+                    .p1
+                    .p1
+                each user in users
+                    +user-card(user)
