@@ -11,6 +11,8 @@ router
   .route('/dashboard/:userId')
   .get(authController.protect, viewController.getDashboard);
 router.route('/allocate/:userId').get(viewController.allocatePage);
+
+router.route('/savedocument/:userId').get(viewController.getSaveDoc);
 // router.route('/signup').get(viewController.getSignup);
 // router.route('/doctors').get(viewController.getDoctors);
 // router

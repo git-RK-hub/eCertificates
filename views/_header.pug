@@ -26,13 +26,23 @@ nav
     .nav-links
     .nav-links
     .nav-links
-    .nav-links
-    .nav-links
     if user
         .nav-links
-            a(style="cursor:pointer; margin-right: 7px;" href=`/dashboard/${user._id}`) Dashboard
-        .nav-links#logout-head
-            p(style="cursor:pointer; margin-left: 7px;") Logout 
+        .nav-links
+            .dropdown
+                span(style="cursor:pointer; margin-right: 7px; font-size: 15px;")= `${user.name} v`
+                if (user.role === "user")
+                    .dropdown-content
+                        p 
+                            a(href=`/savedocument/${user._id}`) Save Document
+                        p
+                            a(href=`/dashboard/${user._id}`) View Document
+                        p#logout-head(style="color: red; cursor: pointer;") Logout
+                else
+                    .dropdown-content
+                        p 
+                            a(href=`/dashboard/${user._id}`) Allocate Document
+                        p#logout-head(style="color: red; cursor: pointer;") Logout
     else
         .nav-links#login-head
             p(style="cursor:pointer;") Login 

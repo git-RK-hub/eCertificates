@@ -31,7 +31,7 @@ export const login = async (obj) => {
     if (res.data.status === 'success') {
       alert('login');
       window.setTimeout(() => {
-        location.assign(`http://localhost/dashboard/${res.data.data.user._id}`);
+        location.assign(`http://localhost:80/`);
       }, 1000);
     }
   } catch (err) {

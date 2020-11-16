@@ -8385,7 +8385,9 @@ var elements = {
   loginForm: document.querySelector('.loginform'),
   uploadCertificate: document.querySelector('.uploadCerti'),
   uploadForm: document.getElementById('uploadForm'),
-  downloadCerti: document.querySelector('.p8')
+  downloadCerti: document.querySelector('.user-documents'),
+  savedocForm: document.getElementById('savedoc-form'),
+  saveDocBtn: document.querySelector('saveDoc')
 };
 exports.elements = elements;
 
@@ -8504,7 +8506,7 @@ var login = /*#__PURE__*/function () {
             if (res.data.status === 'success') {
               alert('login');
               window.setTimeout(function () {
-                location.assign("http://localhost/dashboard/".concat(res.data.data.user._id));
+                location.assign("http://localhost:80/");
               }, 1000);
             }
 
@@ -8860,7 +8862,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var uploadCerti = /*#__PURE__*/function () {
+var saveDocument = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(obj) {
     var res;
     return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -8871,7 +8873,7 @@ var uploadCerti = /*#__PURE__*/function () {
             _context.next = 3;
             return (0, _axios.default)({
               method: 'POST',
-              url: "http://localhost:80/api/v1/admin/encrypt",
+              url: "http://localhost:80/api/v1/user/saveDocument",
               data: obj,
               headers: {
                 'Content-Type': 'multipart/form-data'
@@ -8904,23 +8906,73 @@ var uploadCerti = /*#__PURE__*/function () {
     }, _callee, null, [[0, 7]]);
   }));
 
-  return function uploadCerti(_x) {
+  return function saveDocument(_x) {
     return _ref.apply(this, arguments);
+  };
+}();
+
+var uploadCerti = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(obj) {
+    var res;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return (0, _axios.default)({
+              method: 'POST',
+              url: "http://localhost:80/api/v1/admin/encrypt",
+              data: obj,
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            });
+
+          case 3:
+            res = _context2.sent;
+
+            if (res.data.status === 'success') {
+              alert('Uploaded');
+              window.setTimeout(function () {
+                location.assign("/");
+              }, 1000);
+            }
+
+            _context2.next = 10;
+            break;
+
+          case 7:
+            _context2.prev = 7;
+            _context2.t0 = _context2["catch"](0);
+            console.log(_context2.t0);
+
+          case 10:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 7]]);
+  }));
+
+  return function uploadCerti(_x2) {
+    return _ref2.apply(this, arguments);
   };
 }();
 
 if (_base.elements.downloadCerti) {
   _base.elements.downloadCerti.addEventListener('click', /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(e) {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(e) {
       var certiName, userId, res;
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              certiName = _base.elements.downloadCerti.innerHTML;
-              userId = _base.elements.downloadCerti.dataset.userid;
-              _context2.prev = 2;
-              _context2.next = 5;
+              window.x = e.target;
+              certiName = e.target.textContent;
+              userId = e.target.dataset.userid;
+              _context3.prev = 3;
+              _context3.next = 6;
               return (0, _axios.default)({
                 method: 'POST',
                 url: "http://localhost:80/api/v1/user/decrypt",
@@ -8930,8 +8982,8 @@ if (_base.elements.downloadCerti) {
                 }
               });
 
-            case 5:
-              res = _context2.sent;
+            case 6:
+              res = _context3.sent;
 
               if (res.status === '200') {
                 window.setTimeout(function () {
@@ -8939,26 +8991,39 @@ if (_base.elements.downloadCerti) {
                 }, 1000);
               }
 
-              _context2.next = 12;
+              _context3.next = 13;
               break;
 
-            case 9:
-              _context2.prev = 9;
-              _context2.t0 = _context2["catch"](2);
-              console.log(_context2.t0);
+            case 10:
+              _context3.prev = 10;
+              _context3.t0 = _context3["catch"](3);
+              console.log(_context3.t0);
 
-            case 12:
+            case 13:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2, null, [[2, 9]]);
+      }, _callee3, null, [[3, 10]]);
     }));
 
-    return function (_x2) {
-      return _ref2.apply(this, arguments);
+    return function (_x3) {
+      return _ref3.apply(this, arguments);
     };
   }());
+}
+
+if (_base.elements.savedocForm) {
+  _base.elements.savedocForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var formData = new FormData();
+    var file = document.getElementById('docFile');
+    var userId = document.getElementById('saveDoc').dataset.userid;
+    formData.append('docName', document.getElementById('docName').value);
+    formData.append('userId', userId);
+    formData.append('docFile', file.files[0]);
+    saveDocument(formData);
+  });
 }
 
 if (_base.elements.uploadForm) {
@@ -9074,7 +9139,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49679" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63283" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

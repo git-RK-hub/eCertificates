@@ -11,7 +11,9 @@ export const elements = {
   loginForm: document.querySelector('.loginform'),
   uploadCertificate: document.querySelector('.uploadCerti'),
   uploadForm: document.getElementById('uploadForm'),
-  downloadCerti: document.querySelector('.p8')
+  downloadCerti: document.querySelector('.user-documents'),
+  savedocForm: document.getElementById('savedoc-form'),
+  saveDocBtn: document.querySelector('saveDoc')
 };
 
 export const renderLoader = (parent) => {

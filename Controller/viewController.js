@@ -17,11 +17,17 @@ exports.getDashboard = async (req, res) => {
   });
 };
 
+exports.getSaveDoc = async (req, res) => {
+  res.status(200).render('saveDocument', {
+    title: 'Private Dlocker'
+  });
+};
+
 exports.allocatePage = async (req, res) => {
-  const user = await User.findById(req.params.userId);
+  const doc = await User.findById(req.params.userId);
   res.status(200).render('allocate', {
     title: 'Private Dlocker',
-    user
+    doc
   });
 };
 

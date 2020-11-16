@@ -20,6 +20,8 @@ router.post('/login', authController.login);
 
 router.post('/decrypt', userController.decrypt);
 
+router.post('/saveDocument', userController.saveDocument);
+
 router.delete('/deleteMe', authController.protect, userController.deleteMe);
 
 module.exports = router;

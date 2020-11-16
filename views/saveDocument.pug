@@ -1,0 +1,9 @@
+extends base
+
+block content
+    .saveDocument
+        .p17 Save your documents here
+        form#savedoc-form
+            input(type="text" name="docName" id="docName" placeholder="Document name")
+            input(type="file" name="docFile" id="docFile")
+            button(id="saveDoc" data-userid=`${user._id}` style="cursor:pointer;") Save Document

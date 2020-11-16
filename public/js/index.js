@@ -5,6 +5,27 @@ import axios from 'axios';
 import { elements, renderLoader, addFormHtml, removeFormHtml } from './base';
 import { signup, login, logout } from './authentication';
 
+const saveDocument = async (obj) => {
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: `http://localhost:80/api/v1/user/saveDocument`,
+      data: obj,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    if (res.data.status === 'success') {
+      alert('Uploaded');
+      window.setTimeout(() => {
+        location.assign(`/`);
+      }, 1000);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const uploadCerti = async (obj) => {
   try {
     const res = await axios({
@@ -28,8 +49,9 @@ const uploadCerti = async (obj) => {
 
 if (elements.downloadCerti) {
   elements.downloadCerti.addEventListener('click', async (e) => {
-    const certiName = elements.downloadCerti.innerHTML;
-    const userId = elements.downloadCerti.dataset.userid;
+    window.x = e.target;
+    const certiName = e.target.textContent;
+    const userId = e.target.dataset.userid;
     try {
       const res = await axios({
         method: 'POST',
@@ -47,6 +69,19 @@ if (elements.downloadCerti) {
     } catch (err) {
       console.log(err);
     }
+  });
+}
+
+if (elements.savedocForm) {
+  elements.savedocForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    const file = document.getElementById('docFile');
+    const userId = document.getElementById('saveDoc').dataset.userid;
+    formData.append('docName', document.getElementById('docName').value);
+    formData.append('userId', userId);
+    formData.append('docFile', file.files[0]);
+    saveDocument(formData);
   });
 }
 
