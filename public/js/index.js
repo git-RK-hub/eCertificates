@@ -2,7 +2,7 @@
 
 import '@babel/polyfill';
 import axios from 'axios';
-import { elements, renderLoader, addFormHtml, removeFormHtml } from './base';
+import { elements } from './base';
 import { signup, login, logout } from './authentication';
 
 const saveDocument = async (obj) => {
