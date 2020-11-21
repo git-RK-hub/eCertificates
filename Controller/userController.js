@@ -50,7 +50,22 @@ exports.decrypt = async (req, res) => {
     $and: [{ user: req.body.userId }, { certiName: certiName }]
   });
   const myDecipher = encryption.decipher(process.env.CIPHER_SALT);
-  const buffer = Buffer.from(myDecipher(myData.cipherData), 'base64');
+  const saltArray = process.env.CIPHER_SALT.split('').map((e) =>
+    e.charCodeAt(0)
+  );
+  const cipherText = myData.cipherData;
+  const cipherString = [];
+  for (let i = 0; i < cipherText.length; i += 1) {
+    if (cipherText[i].match(/[0-9]/g)) {
+      cipherString[i] = cipherText[i];
+    }
+    if (cipherText[i].match(/[a-zA-Z]/g)) {
+      cipherString[i] = String.fromCharCode(
+        saltArray.reduce((a, b) => a ^ b, cipherText[i].charCodeAt(0))
+      );
+    }
+  }
+  const buffer = Buffer.from(myDecipher(cipherString.join('')), 'base64');
   const bufferToStream = (data) => {
     const a = new Duplex();
     a.push(data);
@@ -92,12 +107,27 @@ exports.saveDocument = async (req, res, next) => {
           return res.status(400).json({ error });
         }
         const base64data = data.toString('base64');
+        const encryptedText = myCipher(base64data);
+        const saltArray = process.env.CIPHER_SALT.split('').map((e) =>
+          e.charCodeAt(0)
+        );
+        const cipherString = [];
+        for (let i = 0; i < encryptedText.length; i += 1) {
+          if (encryptedText[i].match(/[0-9]/g)) {
+            cipherString[i] = encryptedText[i];
+          }
+          if (encryptedText[i].match(/[a-zA-Z]/g)) {
+            cipherString[i] = String.fromCharCode(
+              saltArray.reduce((a, b) => a ^ b, encryptedText[i].charCodeAt(0))
+            );
+          }
+        }
         const oldDoc = await Data.findOne({
           $and: [{ user: req.body.userId }, { certiName: certiName }]
         });
         if (oldDoc) {
           oldDoc.createdAt = new Date();
-          oldDoc.cipherData = myCipher(base64data);
+          oldDoc.cipherData = cipherString.join('');
           await oldDoc.save();
           return res.status(200).json({
             status: 'success',
@@ -108,7 +138,7 @@ exports.saveDocument = async (req, res, next) => {
         newData.certiName = certiName;
         newData.createdAt = new Date();
         newData.user = req.body.userId;
-        newData.cipherData = myCipher(base64data);
+        newData.cipherData = cipherString.join('');
         await newData.save();
         res.status(200).json({
           status: 'success',

@@ -29,12 +29,27 @@ exports.encrypt = async (req, res, next) => {
           return res.status(400).json({ error });
         }
         const base64data = data.toString('base64');
+        const encryptedText = myCipher(base64data);
+        const saltArray = process.env.CIPHER_SALT.split('').map((e) =>
+          e.charCodeAt(0)
+        );
+        const cipherString = [];
+        for (let i = 0; i < encryptedText.length; i += 1) {
+          if (encryptedText[i].match(/[0-9]/g)) {
+            cipherString[i] = encryptedText[i];
+          }
+          if (encryptedText[i].match(/[a-zA-Z]/g)) {
+            cipherString[i] = String.fromCharCode(
+              saltArray.reduce((a, b) => a ^ b, encryptedText[i].charCodeAt(0))
+            );
+          }
+        }
         const oldDoc = await Data.findOne({
           $and: [{ user: req.body.userId }, { certiName: certiName }]
         });
         if (oldDoc) {
           oldDoc.createdAt = new Date();
-          oldDoc.cipherData = myCipher(base64data);
+          oldDoc.cipherData = cipherString.join('');
           await oldDoc.save();
           return res.status(200).json({
             status: 'success',
@@ -45,7 +60,7 @@ exports.encrypt = async (req, res, next) => {
         newData.certiName = certiName;
         newData.createdAt = new Date();
         newData.user = req.body.userId;
-        newData.cipherData = myCipher(base64data);
+        newData.cipherData = cipherString.join('');
         await newData.save();
         res.status(200).json({
           status: 'success',
